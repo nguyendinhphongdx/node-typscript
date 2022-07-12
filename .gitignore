@@ -1,0 +1,16 @@
+/node_modules
+/dist
+data/*
+/data/*
+/data/*.sls
+!/data/certs
+/data/certs/*.pem
+mount/action/*.yaml
+mount/bin/*
+mount/global.sls
+
+/mount/action/*.yaml
+/mount/bin/*
+/mount/global.sls
+*.tar
+*.zip

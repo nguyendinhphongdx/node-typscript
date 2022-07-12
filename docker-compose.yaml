@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  firewall-soc:
+    container_name: firewall-soc
+    image: firewall-soc:1.0.0
+    deploy:
+      replicas: 1
+    restart: always
+    ports:
+      - 3106:80
+    volumes:
+      # - "F:/MountDKer/firewall-soc/config:/etc/config"
+      # - "F:/MountDKer/firewall-soc/bin:/app/mount/bin"
+      # - "F:/MountDKer/firewall-soc/action:/app/mount/action"
+      # - "F:/MountDKer/firewall-soc/global.sls:/app/mount/global.sls"
+      # - "F:/MountDKer/firewall-soc/data:/app/data"
+      - "/etc/firewall-soc/config:/etc/config"
+      - "/etc/firewall-soc/data:/app/data"
+      - "/opt/so/saltstack/local/salt/curator/files/bin:/app/mount/bin"
+      - "/opt/so/saltstack/local/salt/curator/files/action:/app/mount/action"
+      - "/opt/so/saltstack/local/pillar/global.sls:/app/mount/global.sls"
+    network_mode: bridge
