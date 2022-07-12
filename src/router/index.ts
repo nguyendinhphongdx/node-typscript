@@ -1,10 +1,10 @@
 
-import ruleController from './ruleRouter';
+import ruleRouter from './ruleRouter';
 
 
 class RouterServer {
     init(app) {
-        app.use('/update-center/rules', ruleController);
+        app.use('/update-center/rules', ruleRouter);
     }
 }
 export default new RouterServer();

@@ -1,5 +1,5 @@
-import CollectorModel from './RuleModel';
+import RuleModel from './RuleModel';
 
 export {
-    CollectorModel
+    RuleModel
 }

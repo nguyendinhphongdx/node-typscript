@@ -1,6 +1,6 @@
 import * as fs from "fs";
 
-const checkPathExisted = (path:string): boolean => {
+export const checkPathExisted = (path:string): boolean => {
     if (!path) return false;
     if (fs.existsSync(path)) {
         return true

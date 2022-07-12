@@ -1,12 +1,14 @@
 import * as express from "express";
 import ultis from "../ultis/ultis";
 import { RuleController } from "../controller";
+import upload from "../middleware/upload";
+import { validatorRule } from "../ultis/validate";
 
-const collectorRouter = express.Router();
+const ruleRouter = express.Router();
 
-collectorRouter.get('/',ultis.getPagination, RuleController.getCollectors);
+ruleRouter.get('/', ultis.getPagination, RuleController.getCollectors);
+ruleRouter.post('/upload', upload.array('attachment', 1), validatorRule.uploadRule, RuleController.uploadRule);
 
 
 
-
-export default collectorRouter;
+export default ruleRouter;
