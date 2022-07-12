@@ -1,7 +1,5 @@
 
 import * as express from 'express';
-import { Logs, RoleNameMinion } from "types";
-import { KeyConfig } from './Constant';
 declare global {
     interface String {
         replaceAt(index: number, replacement: any): string;
@@ -57,24 +55,6 @@ class Ultis {
             res.status(status).json(body)
         }
     }
-    parserLogExecute(logs: Logs) {
-        const result = logs.stdout.map((log: string) => {
-            if (log.startsWith("#\t")) {
-                return log.replace("#\t", '#        ');
-            }
-            return log;
-        })
-        return result;
-    }
-    spliteHostNameMinion(hostName: string): RoleNameMinion {
-        const onlyHostName = hostName.split(".")[0];
-        if (!onlyHostName) throw new Error("cannot split " + hostName);
-        const split = onlyHostName.split("_");
-        return {
-            name: split[0],
-            role: split[1]
-        }
-    }
     differentTwoArray(arr1: Array<number>, arr2: Array<number>) {
         let intersection = arr1.filter(x => arr2.includes(x));
         let sub = arr1.filter(x => !arr2.includes(x));
@@ -111,12 +91,6 @@ class Ultis {
         return array1.length === array2.length && array1.slice().sort().every(function (value, index) {
             return value === array2Sorted[index];
         });
-    }
-    actionToKeyBinSave(action: string) {
-        if (action === "delete") return KeyConfig.binDelete;
-        if (action === "close") return KeyConfig.binClose;
-        if (action === "warm") return KeyConfig.binWarm;
-        throw new Error('action not supported');
     }
     convertSchedule = (schedule: string): string => {
         if (!schedule) {

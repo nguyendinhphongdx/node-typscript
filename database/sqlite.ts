@@ -1,9 +1,10 @@
 import { Sequelize } from 'sequelize';
 const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: 'database/db.sqlite'
+    storage: process.cwd() + '/data/db.sqlite',
+    logging: false
 });
-export async function connect() {
+export async function connectSqlite() {
     try {
         await sequelize.authenticate();
         console.log('Connection sqlite has been established success.');

@@ -1,9 +1,9 @@
 import { Options, Sequelize } from 'sequelize';
 import * as mysqlCnn from 'mysql2/promise';
 import getConfig from '../config';
-import { MySQL } from 'types';
+import { MysqlConfig } from 'types';
 
-const mysql:MySQL = getConfig('mysql');
+const mysql:MysqlConfig = getConfig('mysql');
 const config: Options = {
     host: mysql.host || 'localhost',
     dialect: 'mysql',

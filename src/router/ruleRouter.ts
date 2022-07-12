@@ -1,10 +1,10 @@
 import * as express from "express";
 import ultis from "../ultis/ultis";
-import { CollectorController } from "../controller";
+import { RuleController } from "../controller";
 
 const collectorRouter = express.Router();
 
-collectorRouter.get('/',ultis.getPagination, CollectorController.getCollectors);
+collectorRouter.get('/',ultis.getPagination, RuleController.getCollectors);
 
 
 

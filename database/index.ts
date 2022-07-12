@@ -1,5 +1,7 @@
-import sequelize, { connectMysql } from "./mysql";
+import { connectMysql } from "./mysql";
+import sequelize, { connectSqlite } from './sqlite';
 export {
     sequelize,
-    connectMysql
+    connectMysql,
+    connectSqlite
 }

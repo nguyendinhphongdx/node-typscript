@@ -1,18 +1,8 @@
 
 import * as fs from 'fs';
-import { CodeExecFile, PathConfig } from '../ultis/Constant';
-
-import ExecutorService from '../../exec-cmd/exec-ssh';
-import ultis from '../ultis/ultis';
-import e = require('express');
+import { CodeExecFile } from '../ultis/Constant';
 
 class FileService {
-    tranferUploadFileSSH(pathFileLocal: string, pathFileRemote: string): Promise<number> {
-        return ExecutorService.tranferPutFile(pathFileLocal, pathFileRemote);
-    }
-    tranferDowloadFileSSH(pathFileLocal: string, pathFileRemote: string): Promise<number> {
-        return ExecutorService.tranferGetFile(pathFileLocal, pathFileRemote);
-    }
     appendFileLocal(pathFileLocal: string, data: string | Uint8Array): Promise<number> {
         return new Promise((resolve, reject) => {
             try {
@@ -48,29 +38,6 @@ class FileService {
                 reject(error);
             }
         })
-    }
-    generateFileAction(index: string, action: 'delete' | 'close' | 'warm', sector: string = 'index_settings', fileName: string): Promise<number> {
-        const path = PathConfig.pathTemplate + `template-${action}.yaml`;
-        return new Promise((resolve, reject) => {
-            try {
-                if(!fs.existsSync(PathConfig.pathTemplateCopyAction + fileName)){
-                    const buffer = fs.readFileSync(path);
-                    const dataString = ultis.replaceTemplateActionFile(buffer.toString('utf8'), sector, action, index);
-                    fs.writeFileSync(PathConfig.pathTemplateCopyAction + fileName, dataString);
-                }
-                resolve(CodeExecFile.OK);
-            } catch (error) {
-                reject(error);
-            }
-        })
-    }
-    checkConfigExistsOrAppend(stringData: string, config: string, path: string) {
-        if (stringData.includes(config)) return true;
-        else {
-            stringData += '\n' + config;
-            fs.writeFileSync(path, stringData);
-            return stringData;
-        }
     }
 }
 export default new FileService();

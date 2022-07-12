@@ -1,41 +1,31 @@
 import { DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
-import { Rule } from 'types';
+import { RuleProps } from 'types';
 import { sequelize } from '../../database';
-interface RuleType extends Rule,Model<InferAttributes<RuleType>, InferCreationAttributes<RuleType>> {
+interface RuleTypeModel extends RuleProps, Model<InferAttributes<RuleTypeModel>, InferCreationAttributes<RuleTypeModel>> {
     // Some fields are optional when calling UserModel.create() or UserModel.build()
 }
-const RuleModel = sequelize.define<RuleType>("rules", {
+const RuleModel = sequelize.define<RuleTypeModel>("rules", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    name: {
+ 
+    path:{
         type: DataTypes.STRING,
     },
-    chain: {
+    ruleName:{
         type: DataTypes.STRING,
     },
-    protocol: {
+    ruleType: {
         type: DataTypes.STRING,
     },
-    dports: {
-        type: DataTypes.JSON,
-    },
-    source: {
+    version: {
         type: DataTypes.STRING,
     },
-    action: {
-        type: DataTypes.STRING,
-    },
-    description: {
-        type: DataTypes.STRING,
-    },
-    category: {
-        type: DataTypes.INTEGER
-    },
-    tags: {
-        type: DataTypes.JSON
+    size: {
+        type: DataTypes.FLOAT
     }
 });
+
 export default RuleModel;

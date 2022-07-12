@@ -1,16 +1,12 @@
-export interface Rule {
-    id?: number;
-    name:string;
-    chain: 'DOCKER-USER' | 'INPUT' | 'OUTPUT';
-    protocol: 'tcp' | 'udp';
-    dports: number[];
-    source: string;
-    action: 'ACCEPT' | 'DROP',
-    description?: string;
-    category: number;
-    tags?:string[];
+import { AxiosResponse } from "axios";
+export interface RuleProps {
+    id?:number | string;
+    path: string;
+    ruleName: string;
+    ruleType: string;
+    version: string | number;
+    size?: number | string;
 }
-export interface RuleLog extends Rule {
-    logSourceId?: number;
-    minionsId?: number[];
+export interface RuleConfig {
+    ruleTypes: string[]
 }
