@@ -9,6 +9,8 @@ const grafanaRouter = express.Router();
 grafanaRouter.get('/', ultis.getPagination, GrafanaController.getUploadedGrafana);
 grafanaRouter.post('/upload', upload.array('attachment', 1), validatorGrafana.uploadGrafana, GrafanaController.uploadGrafana);
 grafanaRouter.patch('/:grafanaId', validatorGrafana.downloadGrafana, GrafanaController.downloadGrafana);
+grafanaRouter.put('/:grafanaId', validatorGrafana.updateGrafana, GrafanaController.updateGrafana);
+grafanaRouter.delete('/:grafanaId', validatorGrafana.deleteGrafana, GrafanaController.deleteGrafana);
 
 
 export default grafanaRouter;

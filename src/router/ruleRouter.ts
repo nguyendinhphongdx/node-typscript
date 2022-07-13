@@ -9,6 +9,8 @@ const ruleRouter = express.Router();
 ruleRouter.get('/', ultis.getPagination, RuleController.getUploadedRules);
 ruleRouter.post('/upload', upload.array('attachment', 1), validatorRule.uploadRule, RuleController.uploadRule);
 ruleRouter.patch('/:ruleId', validatorRule.downloadRule, RuleController.downloadRule);
+ruleRouter.put('/:ruleId', validatorRule.updateRule, RuleController.updateRule);
+ruleRouter.delete('/:ruleId', validatorRule.deleteRule, RuleController.deleteRule);
 
 
 export default ruleRouter;

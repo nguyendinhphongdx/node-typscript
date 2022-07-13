@@ -1,6 +1,8 @@
 
 import * as express from 'express';
 import * as fs from 'fs';
+import { Op } from 'sequelize';
+
 import ultis from '../ultis/ultis';
 
 import { RuleModel } from '../entities';
@@ -64,6 +66,42 @@ class RuleController {
             } else {
                 throw new Error('file is not exists');
             }
+        } catch (error) {
+            return ultis.response(res, 400, null, error.message || error);
+        }
+    }
+    async updateRule(req: express.Request, res: express.Response) {
+        try {
+            const { ruleId } = req.params;
+            const rule = await RuleModel.findOne({ where: { id: ruleId } });
+            if (!rule) throw new Error('rule not found');
+            const {ruleName, ruleType, version} = req.body;
+            const exists = await RuleModel.findOne({
+                where: {
+                    ruleName, ruleType, version, id: {
+                        [Op.not]: rule.id
+                    }
+                }
+            });
+            if (exists) throw new Error('rule is already exists');
+            const result = await rule.update({
+                ruleName: req.body.ruleName,
+                ruleType: req.body.ruleType,
+                version: req.body.version,
+                description: req.body.description,
+            });
+            return ultis.response(res, 200, result, "success");
+        } catch (error) {
+            return ultis.response(res, 400, null, error.message || error);
+        }
+    }
+    async deleteRule(req: express.Request, res: express.Response) {
+        try {
+            const { ruleId } = req.params;
+            const rule = await RuleModel.findOne({ where: { id: ruleId } });
+            if (!rule) throw new Error('rule not found');
+            const result = await rule.destroy();
+            return ultis.response(res, 200, result, "success");
         } catch (error) {
             return ultis.response(res, 400, null, error.message || error);
         }
