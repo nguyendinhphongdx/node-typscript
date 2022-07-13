@@ -136,5 +136,9 @@ class Ultis {
                 return;
         }
     }
+    generateNameFileRule(type: string, name: string) {
+        const nameFile = name.toLowerCase().replace(/ /g, "_");
+        return "rule-" + type + "-" + nameFile + ".yaml";
+    }
 }
 export default new Ultis();

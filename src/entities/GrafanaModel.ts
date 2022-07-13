@@ -1,22 +1,21 @@
 import { DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
-import { RuleProps } from 'types';
+import { GrafanaProps } from 'types';
+import { producer } from '../ultis/Constant';
 import { sequelize } from '../../database';
-interface RuleTypeModel extends RuleProps, Model<InferAttributes<RuleTypeModel>, InferCreationAttributes<RuleTypeModel>> {
+interface GrafanaTypeModel extends GrafanaProps, Model<InferAttributes<GrafanaTypeModel>, InferCreationAttributes<GrafanaTypeModel>> {
     // Some fields are optional when calling UserModel.create() or UserModel.build()
 }
-const RuleModel = sequelize.define<RuleTypeModel>("rules", {
+const GrafanaModel = sequelize.define<GrafanaTypeModel>("grafanas", {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
+    grafanaName:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     path:{
-        type: DataTypes.STRING,
-    },
-    ruleName:{
-        type: DataTypes.STRING,
-    },
-    ruleType: {
         type: DataTypes.STRING,
     },
     version: {
@@ -28,13 +27,10 @@ const RuleModel = sequelize.define<RuleTypeModel>("rules", {
     fileType:{
         type: DataTypes.STRING,
     },
-    description: {
-        type: DataTypes.STRING,
-    },
     producer:{
         type: DataTypes.STRING,
-        defaultValue: 'bkav'
+        defaultValue: producer
     }
 });
 
-export default RuleModel;
+export default GrafanaModel;

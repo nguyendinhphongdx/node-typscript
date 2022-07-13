@@ -3,15 +3,15 @@ import * as express from 'express';
 import * as fs from 'fs';
 import ultis from '../ultis/ultis';
 
-import { RuleModel } from '../entities';
-import { RuleProps } from 'types';
-import { RuleService } from '../services';
-class RuleController {
+import { RuleModel, GrafanaModel } from '../entities';
+import { GrafanaProps, RuleProps } from 'types';
+import {GrafanaService} from '../services';
+class GrafanaController {
     block: boolean;
     constructor() {
         this.block = false;
     }
-    async getUploadedRules(req: express.Request, res: express.Response) {
+    async getUploadedGrafana(req: express.Request, res: express.Response) {
         try {
             const { limit, offset, page, role } = req.query;
             const condition = {
@@ -21,33 +21,32 @@ class RuleController {
                 delete condition.offset;
                 delete condition.limit;
             }
-            const rules = await RuleModel.findAndCountAll(condition);
+            const rules = await GrafanaModel.findAndCountAll(condition);
             const dataPageing = ultis.getPagingData(rules, page, limit);
             return ultis.response(res, 200, dataPageing, "success");
         } catch (error) {
             return ultis.response(res, 400, null, error.message || error);
         }
     }
-    async uploadRule(req: express.Request, res: express.Response) {
+    async uploadGrafana(req: express.Request, res: express.Response) {
         const { files } = req;
         try {
-            const rule: RuleProps = {
-                ruleName: req.body.ruleName,
-                ruleType: req.body.ruleType,
+            const grafana: GrafanaProps = {
+                grafanaName: req.body.grafanaName,
                 description: req.body.description,
                 version: req.body.version,
                 path: files[0].path,
                 fileType: files[0].mimetype,
                 size: files[0].size
             }
-            const created = await RuleService.createRecord(rule);
+            const created = await GrafanaService.createRecord(grafana);
             return ultis.response(res, 200, created, "success");
         } catch (error) {
             fs.existsSync(files[0].path) && fs.unlinkSync(files[0].path);
             return ultis.response(res, 400, null, error.message || error);
         }
     }
-    async downloadRule(req: express.Request, res: express.Response) {
+    async downloadGrafana(req: express.Request, res: express.Response) {
         try {
             const { ruleId } = req.params;
             const rule = await RuleModel.findOne({ where: { id: ruleId } });
@@ -69,4 +68,4 @@ class RuleController {
         }
     }
 }
-export default new RuleController();
+export default new GrafanaController();

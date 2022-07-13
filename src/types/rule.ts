@@ -4,8 +4,11 @@ export interface RuleProps {
     path: string;
     ruleName: string;
     ruleType: string;
-    version: string | number;
+    version: string;
     size?: number | string;
+    fileType: string;
+    description?: string;
+    producer?: string;
 }
 export interface RuleConfig {
     ruleTypes: string[]
