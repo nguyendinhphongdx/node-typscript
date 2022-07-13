@@ -29,6 +29,5 @@ class RuleService {
             throw error;
         }
     }
-    
 }
 export default new RuleService();

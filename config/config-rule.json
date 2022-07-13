@@ -1,3 +1,4 @@
 {
-    "ruleTypes": ["any", "blacklist", "cardinality", "change", "flatline", "frequency", "metric_aggregation", "new_term", "percentage_match", "spike", "spike_aggregation", "whitelist"]
+    "ruleTypes": ["any", "blacklist", "cardinality", "change", "flatline", "frequency", "metric_aggregation", "new_term", "percentage_match", "spike", "spike_aggregation", "whitelist"],
+    "producers": ["bkav", "custom"]
 }

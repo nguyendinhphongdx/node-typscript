@@ -39,7 +39,8 @@ class GrafanaController {
                 version: req.body.version,
                 path: files[0].path,
                 fileType: files[0].mimetype,
-                size: files[0].size
+                size: files[0].size,
+                producer: req.body.producer,
             }
             const created = await GrafanaService.createRecord(grafana);
             return ultis.response(res, 200, created, "success");
@@ -87,6 +88,7 @@ class GrafanaController {
                 grafanaName: req.body.grafanaName,
                 version: req.body.version,
                 description: req.body.description,
+                producer: req.body.producer,
             });
             return ultis.response(res, 200, result, "success");
         } catch (error) {

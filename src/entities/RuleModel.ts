@@ -1,6 +1,8 @@
 import { DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 import { RuleProps } from 'types';
 import { sequelize } from '../../database';
+import getConfig from '../../config';
+const producers: string[] = getConfig('rule').producers;
 interface RuleTypeModel extends RuleProps, Model<InferAttributes<RuleTypeModel>, InferCreationAttributes<RuleTypeModel>> {
     // Some fields are optional when calling UserModel.create() or UserModel.build()
 }
@@ -33,7 +35,8 @@ const RuleModel = sequelize.define<RuleTypeModel>("rules", {
     },
     producer:{
         type: DataTypes.STRING,
-        defaultValue: 'bkav'
+        values: producers,
+        defaultValue: producers[0]
     }
 });
 

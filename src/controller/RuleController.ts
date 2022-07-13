@@ -40,7 +40,8 @@ class RuleController {
                 version: req.body.version,
                 path: files[0].path,
                 fileType: files[0].mimetype,
-                size: files[0].size
+                size: files[0].size,
+                producer: req.body.producer,
             }
             const created = await RuleService.createRecord(rule);
             return ultis.response(res, 200, created, "success");
@@ -89,6 +90,7 @@ class RuleController {
                 ruleType: req.body.ruleType,
                 version: req.body.version,
                 description: req.body.description,
+                producer: req.body.producer,
             });
             return ultis.response(res, 200, result, "success");
         } catch (error) {

@@ -11,5 +11,6 @@ export interface RuleProps {
     producer?: string;
 }
 export interface RuleConfig {
-    ruleTypes: string[]
+    ruleTypes: string[], 
+    producers: string[],
 }
