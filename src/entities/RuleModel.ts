@@ -15,6 +15,9 @@ const RuleModel = sequelize.define<RuleTypeModel>("rules", {
     path:{
         type: DataTypes.STRING,
     },
+    nameVersion: {
+        type: DataTypes.STRING
+    },
     ruleName:{
         type: DataTypes.STRING,
     },

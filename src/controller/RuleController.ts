@@ -15,16 +15,28 @@ class RuleController {
     }
     async getUploadedRules(req: express.Request, res: express.Response) {
         try {
-            const { limit, offset, page, role } = req.query;
+            const { limit, offset, page, producer } = req.query;
             const condition = {
+                where: {
+                    producer: producer + ''
+                },
                 limit: Number(limit), offset: Number(offset)
             }
             if (!page) {
                 delete condition.offset;
                 delete condition.limit;
             }
+            if (!producer) {
+                delete condition.where;
+            }
             const rules = await RuleModel.findAndCountAll(condition);
-            const dataPageing = ultis.getPagingData(rules, page, limit);
+            const converted = rules.rows.map((rule:any) => {
+                return {
+                    ...rule.dataValues,
+                    version: Number(rule.version)
+                }
+            })
+            const dataPageing = ultis.getPagingData({ rows: converted, count: rules.count }, page, limit);
             return ultis.response(res, 200, dataPageing, "success");
         } catch (error) {
             return ultis.response(res, 400, null, error.message || error);
@@ -36,6 +48,7 @@ class RuleController {
             const rule: RuleProps = {
                 ruleName: req.body.ruleName,
                 ruleType: req.body.ruleType,
+                nameVersion: req.body.nameVersion,
                 description: req.body.description,
                 version: req.body.version,
                 path: files[0].path,
@@ -54,6 +67,7 @@ class RuleController {
         try {
             const { ruleId } = req.params;
             const rule = await RuleModel.findOne({ where: { id: ruleId } });
+            if (!rule) throw new Error('rule not found');
             if (fs.existsSync(rule.path)) {
                 const buffer = fs.readFileSync(rule.path);
                 const fileName = ultis.generateNameFileRule(rule.ruleType, rule.ruleName);
@@ -76,7 +90,10 @@ class RuleController {
             const { ruleId } = req.params;
             const rule = await RuleModel.findOne({ where: { id: ruleId } });
             if (!rule) throw new Error('rule not found');
-            const {ruleName, ruleType, version} = req.body;
+            const content = await RuleService.checkFileContentAccept(rule.path);
+            req.body.ruleType = content.type;
+            req.body.ruleName = content.name;
+            const { ruleName, ruleType, version } = req.body;
             const exists = await RuleModel.findOne({
                 where: {
                     ruleName, ruleType, version, id: {
@@ -91,6 +108,7 @@ class RuleController {
                 version: req.body.version,
                 description: req.body.description,
                 producer: req.body.producer,
+                nameVersion: req.body.nameVersion,
             });
             return ultis.response(res, 200, result, "success");
         } catch (error) {

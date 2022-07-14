@@ -1,7 +1,8 @@
 import { AxiosResponse } from "axios";
 export interface RuleProps {
-    id?:number | string;
+    id?: number | string;
     path: string;
+    nameVersion: string;
     ruleName: string;
     ruleType: string;
     version: string;
@@ -11,6 +12,9 @@ export interface RuleProps {
     producer?: string;
 }
 export interface RuleConfig {
-    ruleTypes: string[], 
+    ruleTypes: string[],
     producers: string[],
+}
+export interface ContentFileRule {
+    index: string, name: string, type: string
 }
