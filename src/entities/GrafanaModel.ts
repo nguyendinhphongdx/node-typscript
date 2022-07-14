@@ -12,7 +12,7 @@ const GrafanaModel = sequelize.define<GrafanaTypeModel>("grafanas", {
         autoIncrement: true,
         primaryKey: true
     },
-    grafanaName: {
+    nameVersion: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -26,6 +26,9 @@ const GrafanaModel = sequelize.define<GrafanaTypeModel>("grafanas", {
         type: DataTypes.FLOAT
     },
     fileType: {
+        type: DataTypes.STRING,
+    },
+    description: {
         type: DataTypes.STRING,
     },
     producer: {

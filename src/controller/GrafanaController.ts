@@ -6,8 +6,8 @@ import { Op } from 'sequelize';
 import ultis from '../ultis/ultis';
 
 import { RuleModel, GrafanaModel } from '../entities';
-import { GrafanaProps, RuleProps } from 'types';
-import {GrafanaService} from '../services';
+import { GrafanaProps } from 'types';
+import { GrafanaService } from '../services';
 class GrafanaController {
     block: boolean;
     constructor() {
@@ -15,13 +15,19 @@ class GrafanaController {
     }
     async getUploadedGrafana(req: express.Request, res: express.Response) {
         try {
-            const { limit, offset, page, role } = req.query;
+            const { limit, offset, page, producer } = req.query;
             const condition = {
+                where: {
+                    producer: producer + ''
+                },
                 limit: Number(limit), offset: Number(offset)
             }
             if (!page) {
                 delete condition.offset;
                 delete condition.limit;
+            }
+            if(!producer){
+                delete condition.where;
             }
             const rules = await GrafanaModel.findAndCountAll(condition);
             const dataPageing = ultis.getPagingData(rules, page, limit);
@@ -34,7 +40,7 @@ class GrafanaController {
         const { files } = req;
         try {
             const grafana: GrafanaProps = {
-                grafanaName: req.body.grafanaName,
+                nameVersion: req.body.nameVersion,
                 description: req.body.description,
                 version: req.body.version,
                 path: files[0].path,
@@ -51,14 +57,14 @@ class GrafanaController {
     }
     async downloadGrafana(req: express.Request, res: express.Response) {
         try {
-            const { ruleId } = req.params;
-            const rule = await RuleModel.findOne({ where: { id: ruleId } });
-            if (fs.existsSync(rule.path)) {
-                const buffer = fs.readFileSync(rule.path);
-                const fileName = ultis.generateNameFileRule(rule.ruleType, rule.ruleName);
+            const { grafanaId } = req.params;
+            const grafana = await GrafanaModel.findOne({ where: { id: grafanaId } });
+            if(!grafana) throw new Error('grafana not found');
+            if (fs.existsSync(grafana.path)) {
+                const buffer = fs.readFileSync(grafana.path);
                 res.writeHead(200, {
                     "Content-Type": "application/octet-stream",
-                    "Content-Disposition": "attachment; filename=" + fileName,
+                    "Content-Disposition": "attachment; filename=" + grafana.nameVersion+'.zip',
                     // "Content-Length": stat.size
                 });
                 res.write(buffer);
@@ -75,17 +81,17 @@ class GrafanaController {
             const { grafanaId } = req.params;
             const grafana = await GrafanaModel.findOne({ where: { id: grafanaId } });
             if (!grafana) throw new Error('grafana not found');
-            const {grafanaName, version} = req.body;
+            const { nameVersion, version } = req.body;
             const exists = await GrafanaModel.findOne({
                 where: {
-                    grafanaName, version, id: {
+                    nameVersion, version, id: {
                         [Op.not]: grafana.id
                     }
                 }
             });
             if (exists) throw new Error('grafana is already exists');
             const result = await grafana.update({
-                grafanaName: req.body.grafanaName,
+                nameVersion: req.body.nameVersion,
                 version: req.body.version,
                 description: req.body.description,
                 producer: req.body.producer,
@@ -100,6 +106,7 @@ class GrafanaController {
             const { grafanaId } = req.params;
             const grafana = await GrafanaModel.findOne({ where: { id: grafanaId } });
             if (!grafana) throw new Error('grafana not found');
+            fs.existsSync(grafana.path) && fs.unlinkSync(grafana.path);
             const result = await grafana.destroy();
             return ultis.response(res, 200, result, "success");
         } catch (error) {

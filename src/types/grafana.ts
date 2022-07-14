@@ -1,7 +1,7 @@
 export interface GrafanaProps {
     id?:number | string;
     path: string;
-    grafanaName: string;
+    nameVersion: string;
     description?:string;
     version: number;
     size?: number | string;

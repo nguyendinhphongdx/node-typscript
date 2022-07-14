@@ -120,6 +120,7 @@ class RuleController {
             const { ruleId } = req.params;
             const rule = await RuleModel.findOne({ where: { id: ruleId } });
             if (!rule) throw new Error('rule not found');
+            fs.existsSync(rule.path) && fs.unlinkSync(rule.path);
             const result = await rule.destroy();
             return ultis.response(res, 200, result, "success");
         } catch (error) {

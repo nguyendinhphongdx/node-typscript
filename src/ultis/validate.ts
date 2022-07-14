@@ -64,7 +64,7 @@ export const validatorGrafana = {
     uploadGrafana(req: express.Request, res: express.Response, next: express.NextFunction) {
         try {
             if (!req.files || req.files.length < 1 || req.files[0].fieldname !== 'attachment') throw new Error('attachment is missing or invalid');
-            if (!req.body.grafanaName) throw new Error('grafanaName is missing or invalid');
+            if (!req.body.nameVersion) throw new Error('nameVersion is missing or invalid');
             if (!req.body.version || !Number(req.body.version)) throw new Error('version is missing or invalid');
             if (!req.body.version || !Number(req.body.version)) throw new Error('version is missing or invalid');
             if (!req.body.producer || !producers.includes(req.body.producer)) throw new Error('producer is missing or invalid');
@@ -88,7 +88,7 @@ export const validatorGrafana = {
     updateGrafana(req: express.Request, res: express.Response, next: express.NextFunction) {
         try {
             if (!req.params.grafanaId) throw new Error('grafanaId is missing or invalid');
-            if (!req.body.grafanaName) throw new Error('grafanaName is missing or invalid');
+            if (!req.body.nameVersion) throw new Error('nameVersion is missing or invalid');
             if (!req.body.version || !Number(req.body.version)) throw new Error('version is missing or invalid');
             if (!req.body.producer || !producers.includes(req.body.producer)) throw new Error('producer is missing or invalid');
 
