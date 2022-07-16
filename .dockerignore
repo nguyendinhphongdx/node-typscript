@@ -1,0 +1,14 @@
+/node_modules
+/config
+/.vscode
+/coverage
+/report-log*
+/*audit.json
+**/db.sqlite
+*.pcap
+*.pem
+*.tar
+*.zip
+/data/*
+/rule/*
+/grafana/*
