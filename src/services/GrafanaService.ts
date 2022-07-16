@@ -1,4 +1,4 @@
-import GrafanaModel from "../entities/GrafanaModel";
+import {GrafanaModel} from "../entities";
 import { GrafanaProps } from "types";
 
 class GrafanaService {

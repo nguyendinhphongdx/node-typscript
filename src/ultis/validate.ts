@@ -106,3 +106,49 @@ export const validatorGrafana = {
         }
     }
 }
+export const validatorOnion = {
+    uploadOnion(req: express.Request, res: express.Response, next: express.NextFunction) {
+        try {
+            if (!req.files || req.files.length < 1 || req.files[0].fieldname !== 'attachment') throw new Error('attachment is missing or invalid');
+            if (!req.body.nameVersion) throw new Error('nameVersion is missing or invalid');
+            if (!req.body.version || !Number(req.body.version)) throw new Error('version is missing or invalid');
+            if (!req.body.version || !Number(req.body.version)) throw new Error('version is missing or invalid');
+            if (!req.body.producer || !producers.includes(req.body.producer)) throw new Error('producer is missing or invalid');
+
+            next();
+        } catch (error) {
+            if (req.files && req.files.length > 0) {
+                fs.existsSync(req.files[0].path) && fs.unlinkSync(req.files[0].path);
+            }
+            ultis.response(res, 400, null, error.message || error);
+        }
+    },
+    downloadOnion(req: express.Request, res: express.Response, next: express.NextFunction) {
+        try {
+            if (!req.params.onionId) throw new Error('onionId is missing or invalid');
+            next();
+        } catch (error) {
+            ultis.response(res, 400, null, error.message || error)
+        }
+    },
+    updateOnion(req: express.Request, res: express.Response, next: express.NextFunction) {
+        try {
+            if (!req.params.onionId) throw new Error('onionId is missing or invalid');
+            if (!req.body.nameVersion) throw new Error('nameVersion is missing or invalid');
+            if (!req.body.version || !Number(req.body.version)) throw new Error('version is missing or invalid');
+            if (!req.body.producer || !producers.includes(req.body.producer)) throw new Error('producer is missing or invalid');
+
+            next();
+        } catch (error) {
+            ultis.response(res, 400, null, error.message || error)
+        }
+    },
+    deleteOnion(req: express.Request, res: express.Response, next: express.NextFunction) {
+        try {
+            if (!req.params.onionId) throw new Error('onionId is missing or invalid');
+            next();
+        } catch (error) {
+            ultis.response(res, 400, null, error.message || error)
+        }
+    }
+}
