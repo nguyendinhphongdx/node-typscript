@@ -7,11 +7,11 @@ import { pathUpload } from '../ultis/Constant';
 
 var storage = multer.diskStorage({
     filename: (req: express.Request, file: Express.Multer.File, cb) => {
-        const fileType = getFileTypeUpload(req.baseUrl);
-        if (!fileType) return cb(new Error('router with file type is not available'), null);
+        const fileTypes = getFileTypeUpload(req.baseUrl);
+        if (!fileTypes) return cb(new Error('router with file type is not available'), null);
 
-        if (file.mimetype !== fileType) {
-            return cb(new Error(`file must be ` + fileType), null);
+        if (!fileTypes.includes(file.mimetype)) {
+            return cb(new Error(`file must be ` + fileTypes.join(' or ')), null);
         }
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
     },
@@ -30,9 +30,9 @@ const getPathUpload = (url: string) => {
     return process.cwd() + "/public";
 }
 const getFileTypeUpload = (url: string) => {
-    if (url.includes('/rules')) return 'text/yaml';
-    if (url.includes('/grafana')) return 'application/zip';
-    if (url.includes('/onion')) return 'application/zip';
+    if (url.includes('/rules')) return ['text/yaml'];
+    if (url.includes('/grafana')) return ['application/zip','application/x-zip-compressed'];
+    if (url.includes('/onion')) return ['application/zip','application/x-zip-compressed'];
     return null;
 }
 const upload = multer({ storage: storage });

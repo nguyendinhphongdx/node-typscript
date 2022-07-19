@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <style>
+        #customers {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        #customers td,
+        #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        #customers tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        #customers tr:hover {
+            background-color: #ddd;
+        }
+        
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+        }
+        
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            position: -webkit-sticky;
+            /* Safari */
+            position: sticky;
+            top: 0;
+        }
+        
+        li {
+            float: left;
+        }
+        
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        
+        li a:hover {
+            background-color: #111;
+        }
+        
+        .active {
+            background-color: #4CAF50;
+        }
+        
+        .show {
+            display: block !important;
+        }
+        
+        .form-add {
+            display: none;
+        }
+        
+        .click {
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function toggleForm() {
+            document.getElementById("form-add").classList.toggle("show");
+        }
+
+        function request(url, method, data) {
+            return new Promise(async(resolve, reject) => {
+                try {
+                    const res = await fetch(url, {
+                            method,
+                            body: data
+                        })
+                        .then(async response => {
+                            if (response.ok) {
+                                return await response.json();
+                            } else {
+                                const rs = await response.json();
+                                const message = rs.message;
+                                throw new Error(message);
+                            }
+                        })
+                        .then(response => resolve(response))
+                        .catch(err => {
+                            reject(err.message);
+                        })
+                } catch (error) {
+                    reject(error.message);
+                }
+            })
+        }
+        async function uploadVersion(e) {
+            try {
+                const formData = new FormData();
+                const files = document.getElementById("attachment").files[0];
+                formData.append("attachment", files);
+                formData.append("nameVersion", document.getElementById("nameVersion").value);
+                formData.append("description", document.getElementById("description").value);
+                formData.append("version", document.getElementById("version").value);
+                formData.append("producer", document.getElementById("producer").value);
+                const response = await request('/update-center/onion/upload', 'POST', formData);
+                alert('Thêm thành công!');
+                location.reload();
+            } catch (error) {
+                alert(error.message || error);
+            }
+        }
+
+        function deleteItem(id) {
+            alert(id);
+        }
+    </script>
+</head>
+
+<body>
+    <ul>
+        <li><a class="active" href="#home">Onion</a></li>
+        <li><a href="#news">Grafana</a></li>
+        <li><a href="#contact">Rule</a></li>
+    </ul>
+    <main style="padding:0px 50px">
+        <h1 style="display: flex; justify-content: space-between;">
+            <button type="button" onclick="toggleForm()">Add Version</button>
+        </h1>
+        <div class="form-add" id="form-add">
+            <br>
+            <label>Tên phiên bản:</label>
+            <input type="text" name="nameVersion" id="nameVersion" placeholder="tên phiên bản" />
+            </br>
+            <label>Source:</label>
+            <input type="file" name="attachment" id="attachment" accept=".zip" />
+            </br>
+            <label>Mô tả:</label>
+            <input type="text" placeholder="mô tả" id="description" name="description" />
+            </br>
+            <label>Số phiên bản:</label>
+            <input type="number" name="version" id="version" step="0.1" min="1" placeholder="số phiên bản">
+            </br>
+            <label>Nhà cung cấp:</label>
+            <select name="producer" id="producer">
+            <option value="bkav">bkav</option>
+            <option value="custom">custom</option>
+          </select>
+            <button type="submit" onclick="uploadVersion()">Upload version</button>
+        </div>
+        <table id="customers">
+            <tr>
+                <th>Version Name</th>
+                <th>Version</th>
+                <th>Size</th>
+                <th>File Type</th>
+                <th>Description</th>
+                <th>Producer</th>
+                <th>Action</th>
+            </tr>
+            <% onions.forEach(function(item) {%>
+                <tr>
+                    <td>
+                        <%= item.dataValues.nameVersion %>
+                    </td>
+                    <td>
+                        <%= item.dataValues.version %>
+                    </td>
+                    <td>
+                        <%= item.dataValues.size %>
+                    </td>
+                    <td>
+                        <%= item.dataValues.fileType %>
+                    </td>
+                    <td>
+                        <%= item.dataValues.description %>
+                    </td>
+                    <td>
+                        <%= item.dataValues.producer %>
+                    </td>
+                    <td>
+                        <span class="click" onclick="deleteItem('<%= item.dataValues.id %>')">Delete</span>
+                        <span>Delete</span>
+                    </td>
+                </tr>
+                <% }); %>
+        </table>
+    </main>
+</body>
+
+</html>

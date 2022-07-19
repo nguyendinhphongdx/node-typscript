@@ -8,6 +8,7 @@ const config: AppConfig = getConfig('app');
 
 const PORT = config.port || 3109;
 
+
 app.listen(PORT, async () => {
     fs.promises.mkdir(pathUpload.rule, { recursive: true }).catch(console.error);
     fs.promises.mkdir(pathUpload.grafana, { recursive: true }).catch(console.error);
