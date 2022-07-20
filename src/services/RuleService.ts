@@ -37,7 +37,7 @@ class RuleService {
             try {
                 if (!fs.existsSync(path)) reject(new Error(path + ' not found or deleted'));
                 const content: any = yaml.load(fs.readFileSync(path, 'utf8'));
-                if (!content) reject(new Error('Load file fail'));
+                if (!content) reject(new Error('Load content file fail'));
                 const { type, name, index } = content;
                 if (!type) throw new Error('Rule file is not includes type');
                 if (!name) throw new Error('Rule file is not includes name');

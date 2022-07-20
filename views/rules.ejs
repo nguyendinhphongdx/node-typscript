@@ -157,38 +157,24 @@
             try {
                 const formData = new FormData();
                 const files = document.getElementById("attachment").files[0];
-                formData.append("attachment", files);
+                formData.append("attachment", files, 'attachment.yaml');
                 formData.append("nameVersion", document.getElementById("nameVersion").value);
                 formData.append("description", document.getElementById("description").value);
                 formData.append("version", document.getElementById("version").value);
                 formData.append("producer", document.getElementById("producer").value);
-                const application = document.getElementById("application").value;
-                if (application === 'onion') {
-                    const response = await request('/update-center/onion/upload', 'POST', formData);
-                    alert('Thêm thành công!');
-                }
-                if (application === 'grafana') {
-                    const response = await request('/update-center/grafana/upload', 'POST', formData);
-                    alert('Thêm thành công!');
-                }
-
+                const response = await request('/update-center/rules/upload', 'POST', formData);
+                alert('Thêm thành công!');
                 location.reload();
             } catch (error) {
                 alert(error.message || error);
             }
         }
 
-        async function deleteVersion(id, type) {
+        async function deleteVersion(id) {
             if (confirm("bạn thực sự muốn xóa?")) {
                 try {
-                    if (type === 'onion') {
-                        const result = await request('/update-center/onion/' + id, 'delete');
-                        alert("xóa thành công");
-                    }
-                    if (type === 'grafana') {
-                        const result = await request('/update-center/grafana/' + id, 'delete');
-                        alert("xóa thành công");
-                    }
+                    const result = await request('/update-center/rules/' + id, 'delete');
+                    alert("xóa thành công");
 
                     location.reload();
                 } catch (error) {
@@ -196,24 +182,15 @@
                 }
             }
         }
-        async function downloadVersion(id, type, name) {
-            var result = null;
+        async function downloadVersion(id, name) {
             try {
-                if (type === 'onion') {
-                    result = await request('/update-center/onion/' + id, 'PATCH', null, {
-                        blob: true
-                    });
-
-                }
-                if (type === 'grafana') {
-                    result = await request('/update-center/grafana/' + id, 'PATCH', null, {
-                        blob: true
-                    });
-                }
+                const result = await request('/update-center/rules/' + id, 'PATCH', null, {
+                    blob: true
+                });
                 var url = window.URL.createObjectURL(result);
                 var a = document.createElement('a');
                 a.href = url;
-                a.download = name + ".zip";
+                a.download = name + ".yaml";
                 document.body.appendChild(a); // we need to append the element to the dom -> otherwise it will not work in firefox
                 a.click();
                 a.remove()
@@ -227,19 +204,19 @@
 
 <body>
     <ul>
-        <li><a class="active" href="/update-center/views/app">Application</a></li>
-        <li><a href="/update-center/views/rule">Rule</a></li>
+        <li><a href="/update-center/views/app">Application</a></li>
+        <li><a class="active" href="/update-center/views/rule">Rule</a></li>
     </ul>
     <main style="padding:0px 50px">
         <h1 style="display: flex; justify-content: space-between;">
-            <button class="button" style="vertical-align:middle" type="button" onclick="toggleForm()"><span>Add Version </span></button>
+            <button class="button" style="vertical-align:middle" type="button" onclick="toggleForm()"><span>Add Rule </span></button>
         </h1>
         <div class="form-add" id="form-add">
             <label>Tên phiên bản:</label>
             <input type="text" name="nameVersion" id="nameVersion" placeholder="tên phiên bản" />
             </br>
             <label>Source:</label>
-            <input type="file" name="attachment" id="attachment" accept=".zip" />
+            <input type="file" name="attachment" id="attachment" accept=".yaml" />
             </br>
             <label>Mô tả:</label>
             <input type="text" placeholder="mô tả" id="description" name="description" />
@@ -253,26 +230,21 @@
             <option value="custom">custom</option>
           </select>
             </br>
-            <label>Loại ứng dụng:</label>
-            <select name="application" id="application">
-            <option value="onion">onion</option>
-            <option value="grafana">grafana</option>
-          </select>
-            </br>
             <button class="button" style="vertical-align:middle" type="submit" onclick="uploadVersion()"><span>Upload version </span></button>
         </div>
         <table id="customers">
             <tr>
                 <th>Version Name</th>
                 <th>Version</th>
-                <th>Size</th>
+                <th>Rule Type</th>
+                <th>Rule Name</th>
                 <th>File Type</th>
+                <th>File Size</th>
                 <th>Description</th>
-                <th>Application</th>
                 <th>Producer</th>
                 <th>Action</th>
             </tr>
-            <% versions.forEach(function(item) {%>
+            <% rules.forEach(function(item) {%>
                 <tr>
                     <td>
                         <%= item.nameVersion %>
@@ -281,23 +253,26 @@
                         <%= item.version %>
                     </td>
                     <td>
-                        <%= item.size %>
+                        <%= item.ruleType %>
+                    </td>
+                    <td>
+                        <%= item.ruleName %>
                     </td>
                     <td>
                         <%= item.fileType %>
                     </td>
                     <td>
-                        <%= item.description %>
+                        <%= item.size %>
                     </td>
                     <td>
-                        <%= item.type %>
+                        <%= item.description %>
                     </td>
                     <td>
                         <%= item.producer %>
                     </td>
                     <td>
-                        <span class="click" onclick="deleteVersion('<%= item.id %>','<%= item.type %>')">Delete</span>
-                        <span class="click" onclick="downloadVersion('<%= item.id %>','<%= item.type %>', '<%= item.nameVersion%>')">Download</span>
+                        <span class="click" onclick="deleteVersion('<%= item.id %>')">Delete</span>
+                        <span class="click" onclick="downloadVersion('<%= item.id %>', '<%= item.nameVersion%>')">Download</span>
                     </td>
                 </tr>
                 <% }); %>

@@ -30,7 +30,7 @@ const getPathUpload = (url: string) => {
     return process.cwd() + "/public";
 }
 const getFileTypeUpload = (url: string) => {
-    if (url.includes('/rules')) return ['text/yaml'];
+    if (url.includes('/rules')) return ['text/yaml','application/octet-stream'];
     if (url.includes('/grafana')) return ['application/zip','application/x-zip-compressed'];
     if (url.includes('/onion')) return ['application/zip','application/x-zip-compressed'];
     return null;

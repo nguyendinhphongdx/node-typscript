@@ -11,7 +11,7 @@ class RouterServer {
         app.use('/update-center/grafana', grafanaRouter);
         app.use('/update-center/onion', onionRouter);
         app.use('/update-center/settings', settingRouter);
-        app.use('/update-center', viewRouter);
+        app.use('/update-center/views', viewRouter);
     }
 }
 export default new RouterServer();

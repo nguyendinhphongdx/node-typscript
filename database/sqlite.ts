@@ -9,7 +9,7 @@ export async function connectSqlite() {
         await sequelize.authenticate();
         console.log('Connection sqlite has been established success.');
         (async () => {
-            await sequelize.sync({ force: true });
+            await sequelize.sync({ force: false });
             // Code here
         })();
     } catch (error) {
