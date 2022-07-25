@@ -1,5 +1,5 @@
 import app from "./app";
-import { connectSqlite } from "../database";
+import { connectMysql } from "../database";
 import * as fs from 'fs';
 import getConfig from "../config";
 import { AppConfig } from "types";
@@ -15,5 +15,5 @@ app.listen(PORT, async () => {
     fs.promises.mkdir(pathUpload.onion, { recursive: true }).catch(console.error);
     
     console.log(`Server is running on port: ${PORT}`);
-    await connectSqlite();
+    await connectMysql();
 });
