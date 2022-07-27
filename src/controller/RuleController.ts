@@ -71,6 +71,7 @@ class RuleController {
             if (fs.existsSync(rule.path)) {
                 const buffer = fs.readFileSync(rule.path);
                 const fileName = ultis.generateNameFileRule(rule.ruleType, rule.ruleName);
+                console.log('download file: ' + fileName);
                 res.writeHead(200, {
                     "Content-Type": "application/octet-stream",
                     "Content-Disposition": "attachment; filename=" + fileName,

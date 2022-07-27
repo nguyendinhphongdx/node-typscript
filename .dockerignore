@@ -10,5 +10,6 @@
 *.tar
 *.zip
 /data/*
-/rule/*
-/grafana/*
+/public/rule/*
+/public/grafana/*
+/public/onion/*
