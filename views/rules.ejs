@@ -161,7 +161,7 @@
                 formData.append("nameVersion", document.getElementById("nameVersion").value);
                 formData.append("description", document.getElementById("description").value);
                 formData.append("version", document.getElementById("version").value);
-                formData.append("producer", document.getElementById("producer").value);
+                formData.append("producer", "bkav");
                 const response = await request('/update-center/rules/upload', 'POST', formData);
                 alert('Thêm thành công!');
                 location.reload();
@@ -224,11 +224,11 @@
             <label>Số phiên bản:</label>
             <input type="number" name="version" id="version" step="0.1" min="1" placeholder="số phiên bản">
             </br>
-            <label>Nhà cung cấp:</label>
+            <!-- <label>Nhà cung cấp:</label>
             <select name="producer" id="producer">
             <option value="bkav">bkav</option>
             <option value="custom">custom</option>
-          </select>
+          </select> -->
             </br>
             <button class="button" style="vertical-align:middle" type="submit" onclick="uploadVersion()"><span>Upload version </span></button>
         </div>
