@@ -1,13 +1,6 @@
-import RuleController from './RuleController';
-import GrafanaController from './GrafanaController';
-import SettingsController from './SettingsController';
-import OnionController from './OnionController';
+import UserController from './UserController';
 import ViewController from './ViewController';
-
 export {
-    RuleController,
-    GrafanaController,
-    SettingsController,
-    OnionController,
+    UserController,
     ViewController
 }

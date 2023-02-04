@@ -1,8 +1,0 @@
-{
-    "host": "10.2.32.65",
-    "database": "soc_update_center",
-    "user": "soc",
-    "password": "Bkav@2021",
-    "force": false,
-    "port": 3306
-}

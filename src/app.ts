@@ -15,8 +15,10 @@ class App {
     }
 
     private config(): void {
-        // this.app.use('/static', express.static(path.join(process.cwd(), 'views')))
-        this.app.set('views', path.join(process.cwd(), 'views'));
+        this.app.use('/assets', express.static(path.join(process.cwd(), '/public/assets')))
+        this.app.use('/vendor', express.static(path.join(process.cwd(), '/public/vendor')))
+
+        // this.app.set('views', path.join(process.cwd(), 'views'));
         this.app.set('view engine', 'ejs');
         // Giúp chúng ta tiếp nhận dữ liệu từ body của request
         this.app.use(express.json());

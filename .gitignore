@@ -14,4 +14,3 @@ mount/global.sls
 /mount/global.sls
 *.tar
 *.zip
-/public/*

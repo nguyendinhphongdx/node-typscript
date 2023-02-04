@@ -29,15 +29,5 @@ class FileService {
             }
         })
     }
-    writeFileYAML(pathFile: string, data: string | NodeJS.ArrayBufferView) {
-        return new Promise((resolve, reject) => {
-            try {
-                fs.writeFileSync(pathFile, data, "binary");
-                resolve(CodeExecFile.OK);
-            } catch (error) {
-                reject(error);
-            }
-        })
-    }
 }
 export default new FileService();

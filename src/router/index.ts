@@ -1,17 +1,15 @@
 
-import grafanaRouter from './grafanaRouter';
-import onionRouter from './onionRouter';
-import ruleRouter from './ruleRouter';
-import settingRouter from './settingRouter';
+import { AppConfig } from 'types';
+import * as express from "express";
+import userRouter from './userRouter';
 import viewRouter from './viewRouter';
+import getConfig from '../../config';
 
+const config: AppConfig = getConfig('app');
 class RouterServer {
-    init(app) {
-        app.use('/update-center/rules', ruleRouter);
-        app.use('/update-center/grafana', grafanaRouter);
-        app.use('/update-center/onion', onionRouter);
-        app.use('/update-center/settings', settingRouter);
-        app.use('/update-center/views', viewRouter);
+    init(app: express.Application) {
+        app.use(`${config.subDomain}/users`, userRouter);
+        app.use(`${config.subDomain}/views`, viewRouter);
     }
 }
 export default new RouterServer();

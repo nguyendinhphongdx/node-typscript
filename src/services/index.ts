@@ -1,11 +1,8 @@
 import ModelService from './ModelService';
-import RuleService from './RuleService';
-import GrafanaService from './GrafanaService';
-import OnionService from './OnionService';
-
+import UserService from './UserService';
+import FileService from './FileService';
 export {
     ModelService,
-    RuleService,
-    GrafanaService,
-    OnionService
+    UserService,
+    FileService,
 }

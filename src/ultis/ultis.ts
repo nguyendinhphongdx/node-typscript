@@ -35,16 +35,7 @@ class Ultis {
             throw error;
         }
     }
-    replaceTemplateActionFile(stringFile: string, sector: string, action: string, index: string): string | null {
-        try {
-            stringFile = stringFile.replace(/_sector_/g, sector);
-            stringFile = stringFile.replace(/_index_/g, index);
-            return stringFile.replace(/_action_/g, action);
-        } catch (error) {
-            throw error;
-        }
-    }
-    response(res, status: number, data?: any, message?: string) {
+    response(res:express.Response, status: number, data?: any, message?: string) {
         const body = {
             message, data,
         }
@@ -65,13 +56,6 @@ class Ultis {
             intersection, sub, plus
         }
     }
-    uniqueSetArrayObject(array: Array<any>, key: string): Array<any> {
-        const result = [];
-        array.forEach(x => {
-            if (!result.find(ext => ext[key] === x[key])) result.push(x);
-        })
-        return result;
-    }
     getPagination(req: express.Request, res: express.Response, next: express.NextFunction) {
         const { page, size } = req.query;
         const limit = size ? +Number(size) : 3;
@@ -80,7 +64,7 @@ class Ultis {
         req.query.offset = offset + '';
         next();
     };
-    getPagingData(data, page, limit) {
+    getPagingData(data: any, page:number, limit: number) {
         const { count: totalItems, rows: records } = data;
         const currentPage = page ? +page : 0;
         const totalPages = page ? Math.ceil(totalItems / limit) : 1;
@@ -91,54 +75,6 @@ class Ultis {
         return array1.length === array2.length && array1.slice().sort().every(function (value, index) {
             return value === array2Sorted[index];
         });
-    }
-    convertSchedule = (schedule: string): string => {
-        if (!schedule) {
-            return;
-        }
-        const duration = schedule.slice(schedule.length - 1, schedule.length);
-        const time = schedule.slice(0, schedule.length - 1);
-        if (isNaN(Number(time))) {
-            return;
-        }
-        switch (duration) {
-            case 'M':
-                return `*/${Number(time)} * * * *`;
-            case 'H':
-                return `0 */${Number(time)} * * *`;
-            case 'D':
-                return `0 0 */${Number(time)} * *`;
-            case 'W':
-                return '0 0 * * 1';
-            default:
-                return;
-        }
-    }
-    convertToTimestamp = (schedule: string): number => {
-        if (!schedule) {
-            return;
-        }
-        const duration = schedule.slice(schedule.length - 1, schedule.length);
-        const time = schedule.slice(0, schedule.length - 1);
-        if (isNaN(Number(time))) {
-            return;
-        }
-        switch (duration) {
-            case 'M':
-                return Number(time) * 60000;
-            case 'H':
-                return Number(time) * 60000 * 60;
-            case 'D':
-                return Number(time) * 60000 * 60 * 24;
-            case 'W':
-                return Number(time) * 60000 * 60 * 24 * 7;
-            default:
-                return;
-        }
-    }
-    generateNameFileRule(type: string, name: string) {
-        const nameFile = name.toLowerCase().replace(/ /g, "_");
-        return "bkav-rule-" + type + "-" + nameFile + ".yaml";
     }
 }
 export default new Ultis();

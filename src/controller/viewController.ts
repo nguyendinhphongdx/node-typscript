@@ -1,19 +1,19 @@
-import { GrafanaModel, OnionModel, RuleModel } from "../entities";
+import { UserModel } from "../entities";
 import * as express from "express";
 import ultis from "../ultis/ultis";
-class ViewController{
+class ViewController {
     async index(req: express.Request, res: express.Response) {
         try {
-            const onions = await OnionModel.findAll();
-            const grafanas = await GrafanaModel.findAll();
+            const onions = [];
+            const grafanas = [];
             const versions = [];
-            onions.forEach((o:any)=>{
+            onions.forEach((o: any) => {
                 versions.push({
                     ...o.dataValues,
                     type: 'onion'
                 });
             })
-            grafanas.forEach((g:any)=>{
+            grafanas.forEach((g: any) => {
                 versions.push({
                     ...g.dataValues,
                     type: 'grafana'
@@ -26,8 +26,8 @@ class ViewController{
     }
     async rules(req: express.Request, res: express.Response) {
         try {
-            const rules = await RuleModel.findAll();
-            res.render('rules', { title: 'Version Rules', rules });
+            const users = await UserModel.findAll();
+            res.render('users', { title: 'Version Rules', users });
         } catch (error) {
             return ultis.response(res, 400, null, error.message || error);
         }

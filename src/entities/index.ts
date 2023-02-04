@@ -1,7 +1,4 @@
-import RuleModel from './RuleModel';
-import GrafanaModel from './GrafanaModel';
-import OnionModel from './OnionModel';
+import UserModel from './UserModel';
 export {
-    RuleModel, GrafanaModel, 
-    OnionModel
+    UserModel,
 }
