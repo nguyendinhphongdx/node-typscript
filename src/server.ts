@@ -11,5 +11,5 @@ const PORT = config.port || 3109;
 app.listen(PORT, async () => {
     console.log(`Server is running on port: ${PORT}`);
     await connectSqlite();
-    await open('https://localhost:3000/api-server/views/app', {app: {name: 'chrome'}});
+    // await open('https://localhost:3000/api-server/views/app', {app: {name: 'chrome'}});
 });
